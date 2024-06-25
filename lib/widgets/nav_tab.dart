@@ -29,7 +29,7 @@ class NavTab extends StatelessWidget {
             children: [
               FaIcon(
                 isSelected ? selectedIcon : icon,
-                color: Colors.black,
+                // color: Colors.black,
               ),
             ],
           ),

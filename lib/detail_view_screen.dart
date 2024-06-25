@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:treadchallange/constans/gaps.dart';
 import 'package:treadchallange/constans/sizes.dart';
 import 'package:treadchallange/report_screen.dart';
+import 'package:treadchallange/utils/darkmode.dart';
 
 class DetailViewScreen extends StatefulWidget {
   const DetailViewScreen({super.key});
@@ -28,9 +29,9 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
     return Container(
       height: size.height * 0.5,
       clipBehavior: Clip.hardEdge,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(Sizes.size12),
           topRight: Radius.circular(Sizes.size12),
         ),
@@ -55,7 +56,9 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: isDarkMode(context)
+                      ? Colors.black87
+                      : Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(Sizes.size10)),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +99,8 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color:
+                      isDarkMode(context) ? Colors.black : Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(Sizes.size10)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

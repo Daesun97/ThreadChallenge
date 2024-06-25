@@ -13,6 +13,12 @@ class _ReportScreenState extends State<ReportScreen> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     //X 신고옵션

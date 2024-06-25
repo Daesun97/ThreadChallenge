@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:treadchallange/camera/camera_screen.dart';
+import 'package:treadchallange/camera/preview_screen.dart';
 import 'package:treadchallange/constans/gaps.dart';
 import 'package:treadchallange/constans/sizes.dart';
 import 'package:treadchallange/main.dart';
+import 'package:video_player/video_player.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -12,6 +18,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  late final VideoPlayerController _videoPlayerController;
   final TextEditingController _textEditingController = TextEditingController();
   final String _posting = "";
   bool _isWriting = false;
@@ -22,6 +29,12 @@ class _PostScreenState extends State<PostScreen> {
 
   void _stopWriting() {
     FocusScope.of(context).unfocus();
+  }
+
+  void _onTapcilp() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const CameraScreen(),
+    ));
   }
 
   @override
@@ -40,13 +53,13 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _stopWriting,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.size16),
+      child: SizedBox(
+        // padding: const EdgeInsets.symmetric(horizontal: Sizes.size),
         height: MediaQuery.of(context).size.height * 0.9,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.size16),
-        ),
+        // clipBehavior: Clip.hardEdge,
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(Sizes.size16),
+        // ),
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -133,12 +146,18 @@ class _PostScreenState extends State<PostScreen> {
                                 //올라오는 거였다...
                               ),
                             ),
+                            IconButton(
+                                onPressed: _onTapcilp,
+                                icon: const FaIcon(FontAwesomeIcons.paperclip))
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
+                // PreviewScreen(
+                //   video: video,
+                // ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(Sizes.size10),
