@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treadchallange/PostScreen.dart';
 import 'package:treadchallange/activity_screen.dart';
 import 'package:treadchallange/body.dart';
@@ -8,22 +10,46 @@ import 'package:treadchallange/constans/sizes.dart';
 import 'package:treadchallange/profile_screen.dart';
 import 'package:treadchallange/router.dart';
 import 'package:treadchallange/search_screen.dart';
+import 'package:treadchallange/setting/model/darkmode_config_model.dart';
+import 'package:treadchallange/setting/repo/darkmode_repo.dart';
+import 'package:treadchallange/setting/view_model/darkmode_vm.dart';
 import 'package:treadchallange/widgets/nav_tab.dart';
 import 'package:faker_dart/faker_dart.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  // final preferences = await SharedPreferences.getInstance();
+  // final repository = DarkModeConfigRepository(preferences);
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+    // MultiProvider(
+    //   providers: [
+    //     ChangeNotifierProvider(
+    //       create: (context) => DarkModeConfigModel(),
+    //     ),
+    //     ChangeNotifierProvider(
+    //       create: (context) => DarkModeConfigViewModel(
+    //         themeModeService: context.read(),
+    //       ),
+    //     ),
+    //   ],
+    //   child: const MyApp(),
+    // ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       routerConfig: router,
-      themeMode: ThemeMode.system,
+      themeMode: ref.watch(themeDarkModeProvider),
+      // themeMode: context.watch<DarkModeConfigModel>().themeDarkMode,
       theme: ThemeData(
         bottomSheetTheme: const BottomSheetThemeData(),
         useMaterial3: true,
@@ -84,9 +110,10 @@ class MyApp extends StatelessWidget {
 }
 
 class ThreadScreen extends StatefulWidget {
-  final String currentPage;
-  static const routeURL = '/';
-  const ThreadScreen({super.key, required this.currentPage});
+  // final String currentPage;
+  static const routeName = 'MainNavigation';
+  final String tab;
+  const ThreadScreen({super.key, required this.tab});
 
   @override
   State<ThreadScreen> createState() => _ThreadScreenState();
@@ -94,21 +121,19 @@ class ThreadScreen extends StatefulWidget {
 
 class _ThreadScreenState extends State<ThreadScreen> {
   final faker = Faker.instance;
-  int _selectedIndex = 0;
+  final List<String> _tabs = [
+    'home',
+    'search',
+    'inbox',
+    'activity',
+    'profile',
+  ];
+  late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   void _onTap(int index) {
-    //여기에서 각 인덱스 마다 context.push를 박아? 안됨ㅋㅋ
+    context.go('/${_tabs[index]}');
     setState(() {
       _selectedIndex = index;
-      if (index == 0) {
-        context.go(ThreadScreen.routeURL);
-      } else if (index == 1) {
-        context.go(SearchScreen.routeURL);
-      } else if (index == 3) {
-        context.push(ActivityScreen.routeURL);
-      } else if (index == 4) {
-        context.go(ProfileScreen.routeURL);
-      }
     });
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:treadchallange/Settings_screen.dart';
+import 'package:treadchallange/setting/views/Settings_screen.dart';
 import 'package:treadchallange/constans/gaps.dart';
 import 'package:treadchallange/constans/sizes.dart';
 import 'package:treadchallange/widgets/PersistentTabBar.dart';

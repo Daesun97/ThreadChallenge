@@ -1,18 +1,22 @@
 import 'package:go_router/go_router.dart';
-import 'package:treadchallange/Settings_screen.dart';
+import 'package:treadchallange/setting/views/Settings_screen.dart';
 import 'package:treadchallange/activity_screen.dart';
 import 'package:treadchallange/main.dart';
-import 'package:treadchallange/privarcy_screen.dart';
+import 'package:treadchallange/setting/views/privarcy_screen.dart';
 import 'package:treadchallange/profile_screen.dart';
 import 'package:treadchallange/search_screen.dart';
 
 final router = GoRouter(
+  initialLocation: '/home',
   routes: [
     GoRoute(
-      path: ThreadScreen.routeURL,
+      path: '/:tab(home|search|inbox|activity|profile)',
+      name: ThreadScreen.routeName,
       builder: (context, state) {
-        final currentPage = state.queryParams['page'] ?? 'home';
-        return ThreadScreen(currentPage: currentPage);
+        final tab = state.params['tab']!;
+        return ThreadScreen(
+          tab: tab,
+        );
       },
     ),
     GoRoute(
