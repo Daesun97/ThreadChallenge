@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,9 +8,10 @@ import 'package:treadchallange/PostScreen.dart';
 import 'package:treadchallange/activity_screen.dart';
 import 'package:treadchallange/body.dart';
 import 'package:treadchallange/constans/sizes.dart';
+import 'package:treadchallange/firebase_options.dart';
 import 'package:treadchallange/profile_screen.dart';
 import 'package:treadchallange/router.dart';
-import 'package:treadchallange/search_screen.dart';
+import 'package:treadchallange/search/view/search_screen.dart';
 import 'package:treadchallange/setting/model/darkmode_config_model.dart';
 import 'package:treadchallange/setting/repo/darkmode_repo.dart';
 import 'package:treadchallange/setting/view_model/darkmode_vm.dart';
@@ -18,6 +20,8 @@ import 'package:faker_dart/faker_dart.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // final preferences = await SharedPreferences.getInstance();
   // final repository = DarkModeConfigRepository(preferences);
   runApp(
@@ -47,7 +51,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
       themeMode: ref.watch(themeDarkModeProvider),
       // themeMode: context.watch<DarkModeConfigModel>().themeDarkMode,
       theme: ThemeData(

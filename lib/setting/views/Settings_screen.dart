@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:treadchallange/authentication/views/log_in_screen.dart';
+import 'package:treadchallange/authentication/views/signup_screen.dart';
 import 'package:treadchallange/constans/sizes.dart';
 import 'package:treadchallange/setting/model/darkmode_config_model.dart';
 import 'package:treadchallange/setting/view_model/darkmode_vm.dart';
@@ -21,13 +23,13 @@ class SettingScreen extends ConsumerStatefulWidget {
 }
 
 class SettingScreenState extends ConsumerState<SettingScreen> {
-  bool _isLogout = false;
+  final bool _isLogout = false;
 
-  void _onLogoutTap() {
-    Navigator.of(context).pop();
-    setState(() {
-      _isLogout = true;
-    });
+  void _onLogoutTap(BuildContext context, WidgetRef ref) async {
+    await ref.read(settingViewModelProvider.notifier).logOut();
+    if (context.mounted) {
+      context.goNamed(LogInScreen.routeName);
+    }
   }
 
   void _onPrivacyTap() {
@@ -42,7 +44,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
 
   void _onAppearanceTap(BuildContext context, WidgetRef ref) {
     void buttonPressed(ThemeMode mode) {
-      ref.read(darkmodeViewModelProvider.notifier).switchThemeMode(mode);
+      ref.read(settingViewModelProvider.notifier).switchThemeMode(mode);
       // context.read<DarkModeConfigModel>().switchThemeMode(mode);
       context.pop();
     }
@@ -86,7 +88,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
               leading: const Icon(FontAwesomeIcons.circleHalfStroke),
               title: const Text("다크모드 설정"),
               trailing: Text(
-                _appearanceTitle(ref.watch(darkmodeViewModelProvider)),
+                _appearanceTitle(ref.watch(settingViewModelProvider)),
                 // context.watch<DarkModeConfigViewModel>().current_AppearanceTitle,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
@@ -156,20 +158,22 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
               ),
             ),
             ListTile(
-              title: const Text('Log Out (Ios / Buttom)'),
+              title: const Text('로그아웃'),
               textColor: Colors.red,
               onTap: () {
                 showCupertinoModalPopup(
                   context: context,
                   builder: (context) => CupertinoActionSheet(
-                    title: const Text('진짜로?'),
+                    title: const Text('로그아웃?'),
                     actions: [
                       CupertinoActionSheetAction(
-                          onPressed: () {}, child: const Text('안나감')),
+                        onPressed: () {},
+                        child: const Text('취소'),
+                      ),
                       CupertinoActionSheetAction(
                           isDefaultAction: true,
-                          onPressed: _onLogoutTap,
-                          child: const Text('나감'))
+                          onPressed: () => _onLogoutTap(context, ref),
+                          child: const Text('로그아웃'))
                     ],
                   ),
                 );

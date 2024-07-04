@@ -1,24 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:treadchallange/authentication/repository/auth_repo.dart';
 import 'package:treadchallange/setting/model/darkmode_config_model.dart';
 import 'package:treadchallange/setting/repo/darkmode_repo.dart';
 
-final darkmodeViewModelProvider =
-    NotifierProvider<DarkmodeViewModel, ThemeMode>(
+final settingViewModelProvider = NotifierProvider<DarkmodeViewModel, ThemeMode>(
   () => DarkmodeViewModel(),
 );
 
 class DarkmodeViewModel extends Notifier<ThemeMode> {
+  late final AuthenticationRepository _authRepository;
   @override
   ThemeMode build() {
+    _authRepository = ref.read(authRepoProvider);
     return ref.watch(themeDarkModeProvider);
   }
 
   void switchThemeMode(ThemeMode mode) {
     ref.read(themeDarkModeProvider.notifier).switchThemeMode(mode);
   }
+
+  Future<void> logOut() async {
+    await _authRepository.signOut();
+  }
 }
+
+
 
 
 
